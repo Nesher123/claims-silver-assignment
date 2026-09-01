@@ -1,0 +1,51 @@
+[aws]
+bucket = "data-engineer-851725552187-us-east-1"
+region = "us-east-1"
+workgroup = "dataweb_assignment"
+database = "dataweb_ofir"
+candidate_prefix = "candidate/nesher123@gmail.com"
+
+[sample]
+factor = 80  # 1:80 sample; multiply absolute counts only for contractual minimums
+
+[completeness]
+dx_code = 0.95
+npi = 0.98
+member_token = 0.99
+required_fields = 1.0  # claim_id, claim_line, date_of_service, charge_amount
+
+[identity]
+token_resolution_min = 0.85
+token_version_required = "v2"
+
+[volume]
+min_claim_lines = 2_000_000  # full-scale; compare scaled count = sampled * factor
+band_pct = 0.25  # ±25% of prior 3-month mean (from month 4 onward)
+
+[gate.block]
+reasons = [
+    "EMPTY_DELIVERY",
+    "UNREADABLE_FILE",
+    "MISSING_REQUIRED_COLUMNS",
+    "SAME_MONTH_CONFLICT",
+    "TOKEN_AMBIGUOUS",
+]
+
+[gate.warn]
+reasons = [
+    "WRONG_FORMAT",
+    "COMPLETENESS_FAIL",
+    "DOMAIN_FAIL",
+    "DATE_FAIL",
+    "MONEY_FAIL",
+    "TOKEN_VERSION_FAIL",
+    "TOKEN_RESOLUTION_LOW",
+    "VOLUME_FAIL",
+    "VOLUME_BAND_FAIL",
+    "GLOBAL_KEY_DUP",
+    "TOKEN_PATIENT_AMBIGUOUS",
+]
+
+[dates]
+min_date = "2015-01-01"
+paid_date_lookback_days = 90
